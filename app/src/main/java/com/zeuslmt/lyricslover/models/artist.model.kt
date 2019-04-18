@@ -1,7 +1,7 @@
-package com.zeuslmt.lyricslover.model
+package com.zeuslmt.lyricslover.models
 
 data class Artist(
-    val id: String,
+    val _id: String,
     val name: String,
     val albums: Array<Album>,
     val songs: Array<Song>
@@ -12,12 +12,12 @@ data class Artist(
 
         other as Artist
 
-        if (id != other.id) return false
+        if (_id != other._id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return _id.hashCode()
     }
 }
