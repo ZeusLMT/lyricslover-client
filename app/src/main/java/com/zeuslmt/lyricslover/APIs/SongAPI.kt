@@ -4,9 +4,7 @@ import com.zeuslmt.lyricslover.models.Song
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 object SongAPI {
     //create URL
@@ -20,8 +18,9 @@ object SongAPI {
         @GET("{song_id}")
         fun getSongById(@Path(value = "song_id", encoded = true) id: String) : Call<Song>
 
+        @FormUrlEncoded
         @POST(".")
-        fun addNewSong()
+        fun addNewSong(@Body newSong: Song)
     }
 
     //Create and config Retrofit with builder
