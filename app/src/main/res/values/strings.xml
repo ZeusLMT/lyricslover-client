@@ -6,4 +6,30 @@
     <string name="tab_text_3">Albums</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="artwork_description">Album artwork</string>
+
+    <string name="hint_title">Song title</string>
+    <string name="hint_artist">Artist</string>
+    <string name="hint_album">Album</string>
+    <string name="hint_lyrics">Lyrics</string>
+
+    <string name="button_label_save">Save</string>
+    <string name="button_label_addArtist">New Artist</string>
+    <string name="button_label_AddAlbum">New Album</string>
+
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts."
+    </string>
 </resources>
