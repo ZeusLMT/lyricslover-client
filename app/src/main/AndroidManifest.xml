@@ -3,6 +3,8 @@
           package="com.zeuslmt.lyricslover">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
             android:allowBackup="true"
@@ -12,7 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".NewSong">
+        <activity android:name=".NewSongActivity">
         </activity>
         <activity
                 android:name=".MainActivity"
