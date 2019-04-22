@@ -11,13 +11,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+        <View
+                android:id="@+id/item_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="64dp"/>
         <TextView
                 android:text="@string/hint_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/textView_songTitle"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="16dp"
-                app:layout_constraintStart_toStartOf="parent" android:textStyle="bold"/>
+                app:layout_constraintStart_toStartOf="parent" android:textStyle="bold" android:layout_marginTop="16dp"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -25,16 +33,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView_songTitle"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="24dp">
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
+                android:id="@+id/linearLayout">
             <TextView
                     android:text="@string/hint_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/textView_artist"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:textStyle="italic"
-            />
+                    android:textColor="@color/colorAccent"/>
             <View
-                    android:id="@+id/divider"
+                    android:id="@+id/album_artist_divider"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="?android:attr/listDivider"

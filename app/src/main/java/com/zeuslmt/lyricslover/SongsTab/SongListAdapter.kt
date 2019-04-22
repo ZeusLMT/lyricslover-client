@@ -16,7 +16,9 @@ class SongListAdapter (private val appContext: Context, val clickListener: (Song
     class ListViewHolder (private val itemView: View,
                           val songTitle: TextView = itemView.findViewById(R.id.textView_songTitle),
                           val artistName: TextView = itemView.findViewById(R.id.textView_artist),
-                          val albumName: TextView = itemView.findViewById(R.id.textView_album)) : RecyclerView.ViewHolder(itemView)
+                          val albumName: TextView = itemView.findViewById(R.id.textView_album),
+                          val horizontalDivider: View = itemView.findViewById(R.id.album_artist_divider),
+                          val itemDivider: View = itemView.findViewById(R.id.item_divider)) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -35,6 +37,13 @@ class SongListAdapter (private val appContext: Context, val clickListener: (Song
         holder.artistName.text = thisSong.artist.name
         if (thisSong.album != null) {
             holder.albumName.text = thisSong.album.title
+        } else {
+            holder.horizontalDivider.visibility = View.GONE
+            holder.albumName.visibility = View.GONE
+        }
+
+        if (position == dataset.lastIndex) {
+            holder.itemDivider.visibility = View.GONE
         }
 
         holder.itemView.setOnClickListener { clickListener(thisSong) }
