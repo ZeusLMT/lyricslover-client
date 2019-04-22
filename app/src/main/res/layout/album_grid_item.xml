@@ -24,7 +24,7 @@
             android:id="@+id/textView_albumTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#9A000000"
+            android:background="#BE000000"
             android:backgroundTintMode="add"
             android:elevation="4dp"
             android:ellipsize="end"

@@ -14,6 +14,8 @@ import android.widget.TextView
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Song
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.InputStream
 import java.lang.Exception
 import java.net.HttpURLConnection
@@ -52,12 +54,36 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
             holder.year.visibility = View.GONE
         }
 
+        if (thisAlbum.artwork != null) {
+            doAsync {
+                val url = appContext.getString(R.string.image_url, thisAlbum.artwork)
+                val artwork: Bitmap? = getArtwork(url)
+                uiThread {
+                    holder.artwork.setImageBitmap(artwork)
+                }
+            }
+        }
+
         holder.itemView.setOnClickListener { clickListener(thisAlbum) }
     }
 
     fun setData(newData: Array<Album>) {
         dataset = newData
         notifyDataSetChanged()
+    }
+
+    private fun getArtwork(urlString: String): Bitmap? {
+        var result: Bitmap? = null
+        val url = URL(urlString)
+        try {
+            val connection = url.openConnection() as HttpURLConnection
+            val inputStream: InputStream = connection.inputStream
+            result = BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+        } catch (e: Exception) {
+            Log.d("artworkDebug", "$e")
+        }
+        return result
     }
 
 //    inner class GetArtwork : AsyncTask<URL,Unit, Bitmap>() {
