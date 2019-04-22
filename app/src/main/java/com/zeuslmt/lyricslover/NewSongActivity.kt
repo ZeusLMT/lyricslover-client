@@ -13,18 +13,21 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MenuItem
 
 
 class NewSongActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_IMAGE_SELECT = 1
     }
-    var imgPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_song)
+
+        supportActionBar?.title = "New Song"
 
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            != PackageManager.PERMISSION_GRANTED) {
