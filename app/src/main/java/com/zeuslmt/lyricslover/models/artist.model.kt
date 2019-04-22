@@ -3,8 +3,8 @@ package com.zeuslmt.lyricslover.models
 data class Artist(
     val _id: String,
     val name: String,
-    val albums: Array<Album>,
-    val songs: Array<Song>
+    val albums: Array<Album>?,
+    val songs: Array<Song>?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

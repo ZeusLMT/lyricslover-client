@@ -4,7 +4,7 @@ data class Album(
     val _id: String,
     val title: String,
     val artist: Artist,
-    val tracks: Array<Song>,
+    val tracks: Array<Song>?,
     val year: Int,
     val artwork: String
 ) {
