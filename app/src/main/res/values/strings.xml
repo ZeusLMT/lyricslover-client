@@ -13,6 +13,8 @@
     <string name="hint_artist">Artist</string>
     <string name="hint_album">Album</string>
     <string name="hint_lyrics">Lyrics</string>
+    <string name="hint_update">dd/mm/yyyy</string>
+    <string name="textView_year">yyyy</string>
 
     <string name="button_label_save">Save</string>
     <string name="button_label_addArtist">New Artist</string>
@@ -32,4 +34,8 @@
         "interact, and exist in space and in relation to each other. Realistic lighting shows "
         "seams, divides space, and indicates moving parts."
     </string>
+
+
+    <string name="image_url">"http://192.168.31.147:3000/%1$s</string>
+
 </resources>

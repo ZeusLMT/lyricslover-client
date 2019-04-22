@@ -5,8 +5,8 @@ data class Album(
     val title: String,
     val artist: Artist,
     val tracks: Array<Song>?,
-    val year: Int,
-    val artwork: String
+    val year: Int?,
+    val artwork: String?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -23,13 +23,13 @@
                 android:text="@string/hint_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/textView_songTitle"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent" android:textStyle="bold" android:layout_marginTop="16dp"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:layout_marginTop="8dp"
+                android:layout_height="match_parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_songTitle"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
@@ -51,7 +51,7 @@
             <TextView
                     android:text="@string/hint_album"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/textView_album"
+                    android:layout_height="wrap_content" android:id="@+id/textView_year"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" android:textStyle="italic"/>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>

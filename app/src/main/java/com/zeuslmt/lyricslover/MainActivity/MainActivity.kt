@@ -11,11 +11,13 @@ import android.view.MenuItem
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.SongsTab.SongsFragment
+import com.zeuslmt.lyricslover.fragments.fragment_songs.AlbumsFragment
+import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Song
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener {
+class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, AlbumsFragment.AlbumsFragListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -75,5 +77,9 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener {
     //Listeners from fragments
     override fun onSongClick(item: Song) {
         Log.d("SongListener", item.title)
+    }
+
+    override fun onAlbumClick(item: Album) {
+        Log.d("AlbumListener", item.title)
     }
 }
