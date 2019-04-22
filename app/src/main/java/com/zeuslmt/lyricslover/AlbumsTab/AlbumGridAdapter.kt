@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
@@ -30,7 +31,8 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
                           val artwork: ImageView = itemView.findViewById(R.id.imageView_artwork),
                           val artistName: TextView = itemView.findViewById(R.id.textView_artist),
                           val horizontalDivider: View = itemView.findViewById(R.id.year_artist_divider),
-                          val year: TextView = itemView.findViewById(R.id.textView_year)) : RecyclerView.ViewHolder(itemView)
+                          val year: TextView = itemView.findViewById(R.id.textView_year),
+                          val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar_artwork)) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -43,9 +45,11 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        (holder as GridViewHolder).progressBar.visibility = View.VISIBLE
+
         val thisAlbum = dataset[position]
 
-        (holder as GridViewHolder).albumTitle.text = thisAlbum.title
+        holder.albumTitle.text = thisAlbum.title
         holder.artistName.text = thisAlbum.artist.name
         if (thisAlbum.year != null) {
             holder.year.text = thisAlbum.year.toString()
@@ -60,8 +64,11 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
                 val artwork: Bitmap? = getArtwork(url)
                 uiThread {
                     holder.artwork.setImageBitmap(artwork)
+                    holder.progressBar.visibility = View.GONE
                 }
             }
+        } else {
+            holder.progressBar.visibility = View.VISIBLE
         }
 
         holder.itemView.setOnClickListener { clickListener(thisAlbum) }

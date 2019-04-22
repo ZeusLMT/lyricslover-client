@@ -43,6 +43,8 @@ class AlbumsFragment : Fragment() {
     }
 
     private fun getSongsList() {
+        progressBar_album.visibility = View.VISIBLE
+
         val albumService = AlbumAPI.service
 
         val result = object : Callback<Array<Album>> {
@@ -55,6 +57,7 @@ class AlbumsFragment : Fragment() {
                     albums = response.body()!!
                     Log.d("abc", albums.size.toString())
                     adapter.setData(albums)
+                    progressBar_album.visibility = View.GONE
                 }
             }
         }

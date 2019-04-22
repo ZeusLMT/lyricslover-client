@@ -43,6 +43,7 @@ class SongsFragment : Fragment() {
     }
 
     private fun getSongsList() {
+        progressBar_song.visibility = View.VISIBLE
         val songService = SongAPI.service
 
         val result = object : Callback<Array<Song>> {
@@ -55,6 +56,7 @@ class SongsFragment : Fragment() {
                     songs = response.body()!!
                     Log.d("abc", songs.size.toString())
                     adapter.setData(songs)
+                    progressBar_song.visibility = View.GONE
                 }
             }
         }
