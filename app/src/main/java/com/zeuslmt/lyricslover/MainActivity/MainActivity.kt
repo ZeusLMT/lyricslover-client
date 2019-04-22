@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener {
 
 
 
-        fab_addSong.setOnClickListener {
+        button_add.setOnClickListener {
             val intent = Intent(this, NewSongActivity::class.java).apply {}
             startActivity(intent)
         }
