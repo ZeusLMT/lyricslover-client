@@ -1,16 +1,21 @@
-package com.zeuslmt.lyricslover
+package com.zeuslmt.lyricslover.MainActivity
 
 import android.content.Intent
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
+import com.zeuslmt.lyricslover.R
+import com.zeuslmt.lyricslover.SongsTab.SongsFragment
+import com.zeuslmt.lyricslover.models.Song
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -65,5 +70,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    //Listeners from fragments
+    override fun onSongClick(item: Song) {
+        Log.d("SongListener", item.title)
     }
 }

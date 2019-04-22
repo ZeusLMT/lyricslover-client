@@ -1,7 +1,9 @@
-package com.zeuslmt.lyricslover.fragments.fragment_songs
+package com.zeuslmt.lyricslover.SongsTab
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +16,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FragmentSongs : Fragment() {
+class SongsFragment : Fragment() {
+    companion object {
+        fun newInstance(): SongsFragment =
+            SongsFragment()
+    }
+
+    private var songs: Array<Song> = emptyArray()
+    private lateinit var adapter: SongListAdapter
+    private var activityCallBack: SongsFragListener ?= null
+
+    interface SongsFragListener{
+        fun onSongClick(item: Song)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_songs, container, false)
@@ -23,13 +37,9 @@ class FragmentSongs : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        button_getSongs.setOnClickListener {
-            getSongsList()
-        }
-    }
-
-    companion object {
-        fun newInstance(): FragmentSongs = FragmentSongs()
+        adapter = SongListAdapter(context!!){item: Song -> onSongClick(item)}
+        setUpRecyclerView()
+        getSongsList()
     }
 
     private fun getSongsList() {
@@ -42,13 +52,27 @@ class FragmentSongs : Fragment() {
 
             override fun onResponse(call: Call<Array<Song>>?, response: Response<Array<Song>>?) {
                 if (response != null) {
-                    val res: Array<Song> = response.body()!!
-                    res.forEach { song ->
-                        Log.d("SongService", song.toString())
-                    }
+                    songs = response.body()!!
+                    Log.d("abc", songs.size.toString())
+                    adapter.setData(songs)
                 }
             }
         }
         songService.getAllSongs().enqueue(result)
+    }
+
+    private fun setUpRecyclerView() {
+        recyclerView_songList.layoutManager = LinearLayoutManager(context)
+        recyclerView_songList.adapter = adapter
+    }
+
+    private fun onSongClick(song: Song) {
+        //Pass post to MainActivity
+        activityCallBack!!.onSongClick(song)
+    }
+
+    override fun onAttach(context: Context){
+        super.onAttach(context)
+        activityCallBack = context as SongsFragListener
     }
 }

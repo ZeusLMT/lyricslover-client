@@ -1,17 +1,18 @@
-package com.zeuslmt.lyricslover
+package com.zeuslmt.lyricslover.MainActivity
 
 import android.content.res.Resources
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentAlbums
 import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentArtists
-import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentSongs
+import com.zeuslmt.lyricslover.SongsTab.SongsFragment
 
 class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment? = when (position) {
-        0 -> FragmentSongs.newInstance()
+        0 -> SongsFragment.newInstance()
         1 -> FragmentArtists.newInstance()
         2 -> FragmentAlbums.newInstance()
         else -> null

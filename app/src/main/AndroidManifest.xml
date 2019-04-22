@@ -14,10 +14,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".NewSongActivity">
+        <activity android:name=".NewSongActivity.NewSongActivity">
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".MainActivity.MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

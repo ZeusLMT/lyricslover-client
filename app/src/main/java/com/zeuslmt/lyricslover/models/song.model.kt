@@ -5,7 +5,7 @@ data class Song(
     val _id: String,
     val title: String,
     val artist: Artist,
-    val album: Album,
+    val album: Album?,
     val lyrics: String,
     val updatedAt: String
 ) {
