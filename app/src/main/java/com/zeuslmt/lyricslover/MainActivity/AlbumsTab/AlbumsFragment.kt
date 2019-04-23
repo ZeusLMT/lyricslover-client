@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
-import com.zeuslmt.lyricslover.AlbumsTab.AlbumGridAdapter
+import com.zeuslmt.lyricslover.MainActivity.AlbumsTab.AlbumGridAdapter
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
 import kotlinx.android.synthetic.main.fragment_albums.*

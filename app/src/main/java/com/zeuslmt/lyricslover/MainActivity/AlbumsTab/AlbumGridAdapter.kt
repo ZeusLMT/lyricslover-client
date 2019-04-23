@@ -1,9 +1,8 @@
-package com.zeuslmt.lyricslover.AlbumsTab
+package com.zeuslmt.lyricslover.MainActivity.AlbumsTab
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
-import com.zeuslmt.lyricslover.models.Song
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.InputStream
@@ -92,29 +90,5 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
         }
         return result
     }
-
-//    inner class GetArtwork : AsyncTask<URL,Unit, Bitmap>() {
-//        override fun doInBackground(vararg urls: URL?): Bitmap? {
-//            var result: Bitmap? = null
-//            try {
-//                val connection = urls[0]!!.openConnection() as HttpURLConnection
-//                val inputStream: InputStream = connection.inputStream
-//                result = BitmapFactory.decodeStream(inputStream)
-//                inputStream.close()
-//            } catch (e: Exception) {
-//                Log.d("artworkDebug", "$e")
-//            }
-//            return result
-//        }
-//
-//        override fun onPostExecute(result: Bitmap?) {
-//            if (result != null) {
-//                (super.holder as GridViewHolder).albumTitle.text = thisAlbum.title
-//            } else {
-//                Log.d("artworkDebug", "Error downloading image")
-//            }
-//        }
-//
-//    }
 
 }

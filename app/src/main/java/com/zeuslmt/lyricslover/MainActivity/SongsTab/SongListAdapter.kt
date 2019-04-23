@@ -1,4 +1,4 @@
-package com.zeuslmt.lyricslover.SongsTab
+package com.zeuslmt.lyricslover.MainActivity.SongsTab
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView

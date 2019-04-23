@@ -10,7 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
-import com.zeuslmt.lyricslover.SongsTab.SongsFragment
+import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 import com.zeuslmt.lyricslover.fragments.fragment_songs.AlbumsFragment
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Song

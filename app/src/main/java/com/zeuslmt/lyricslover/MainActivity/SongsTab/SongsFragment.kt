@@ -1,4 +1,4 @@
-package com.zeuslmt.lyricslover.SongsTab
+package com.zeuslmt.lyricslover.MainActivity.SongsTab
 
 import android.content.Context
 import android.os.Bundle
@@ -54,7 +54,6 @@ class SongsFragment : Fragment() {
             override fun onResponse(call: Call<Array<Song>>?, response: Response<Array<Song>>?) {
                 if (response != null) {
                     songs = response.body()!!
-                    Log.d("abc", songs.size.toString())
                     adapter.setData(songs)
                     progressBar_song.visibility = View.GONE
                 }

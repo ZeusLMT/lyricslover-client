@@ -8,7 +8,7 @@ import retrofit2.http.*
 
 object SongAPI {
     //create URL
-    const val url = "http://192.168.31.147:3000/song/"
+    const val url = "https://tuanl-sssf.jelastic.metropolia.fi/song/"
 
     //Define services
     interface Service {

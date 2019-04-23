@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.fragments.fragment_songs.AlbumsFragment
 import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentArtists
-import com.zeuslmt.lyricslover.SongsTab.SongsFragment
+import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 
 class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 

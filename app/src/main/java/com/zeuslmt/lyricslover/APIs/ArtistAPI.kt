@@ -9,7 +9,7 @@ import retrofit2.http.Path
 
 object ArtistAPI {
     //create URL
-    const val url = "http://192.168.31.147:3000/artist/"
+    const val url = "https://tuanl-sssf.jelastic.metropolia.fi/artist/"
 
     //Define services
     interface Service {
