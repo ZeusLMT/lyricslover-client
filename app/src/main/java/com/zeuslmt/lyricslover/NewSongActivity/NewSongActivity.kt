@@ -1,5 +1,7 @@
 package com.zeuslmt.lyricslover.NewSongActivity
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,11 +14,15 @@ import com.zeuslmt.lyricslover.R
 import kotlinx.android.synthetic.main.activity_new_song.*
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
+import java.io.InputStream
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -80,6 +86,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_album.adapter = adapter
+        spinner_album.onItemSelectedListener = this
     }
 
     private fun getArtist(onComplete: () -> Unit) {
@@ -112,6 +119,21 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_artist.adapter = adapter
+        spinner_artist.onItemSelectedListener = this
+    }
+
+    private fun getArtwork(urlString: String): Bitmap? {
+        var result: Bitmap? = null
+        val url = URL(urlString)
+        try {
+            val connection = url.openConnection() as HttpURLConnection
+            val inputStream: InputStream = connection.inputStream
+            result = BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+        } catch (e: Exception) {
+            Log.d("artworkDebug", "$e")
+        }
+        return result
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -128,7 +150,18 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if(parent!!.id == R.id.spinner_album)
         {
-            //do this
+            if (albums[position].artwork != null) {
+                doAsync {
+                    val url = getString(R.string.image_url, albums[position].artwork)
+                    val artwork: Bitmap? = getArtwork(url)
+                    uiThread {
+                        imageView_artwork.setImageBitmap(artwork)
+//                    progressBar.visibility = View.GONE
+                    }
+                }
+            } else {
+                imageView_artwork.setImageDrawable(getDrawable(R.drawable.artwork_placeholder))
+            }
         }
         else if(parent.id == R.id.spinner_artist)
         {
