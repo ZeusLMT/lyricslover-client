@@ -140,7 +140,7 @@
         <ImageButton
                 android:text="@string/button_label_save"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/button_ok"
+                android:layout_height="wrap_content" android:id="@+id/button_save"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="@+id/guideline"
                 android:layout_marginStart="8dp" app:layout_constraintTop_toTopOf="parent"
