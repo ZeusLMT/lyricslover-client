@@ -39,10 +39,14 @@ class AlbumsFragment : Fragment() {
 
         adapter = AlbumGridAdapter(context!!) { item: Album -> onAlbumClick(item) }
         setUpRecyclerView()
-        getSongsList()
     }
 
-    private fun getSongsList() {
+    override fun onResume() {
+        super.onResume()
+        getAlbumsList()
+    }
+
+    private fun getAlbumsList() {
         progressBar_album.visibility = View.VISIBLE
 
         val albumService = AlbumAPI.service

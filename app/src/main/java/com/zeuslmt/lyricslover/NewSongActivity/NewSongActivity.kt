@@ -50,15 +50,6 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
     private fun getAlbums(onComplete: () -> Unit) {
 //        progressBar_song.visibility = View.VISIBLE
         val albumService = AlbumAPI.service
@@ -121,5 +112,27 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_artist.adapter = adapter
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        if(parent!!.id == R.id.spinner_album)
+        {
+            Log.d("abc", "Nothing selected - album")
+        }
+        else if(parent.id == R.id.spinner_artist)
+        {
+            Log.d("abc", "Nothing selected - artist")
+        }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if(parent!!.id == R.id.spinner_album)
+        {
+            //do this
+        }
+        else if(parent.id == R.id.spinner_artist)
+        {
+            //do this
+        }
     }
 }

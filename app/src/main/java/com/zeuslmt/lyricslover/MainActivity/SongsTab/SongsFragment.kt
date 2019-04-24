@@ -39,6 +39,10 @@ class SongsFragment : Fragment() {
 
         adapter = SongListAdapter(context!!){item: Song -> onSongClick(item)}
         setUpRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         getSongsList()
     }
 
