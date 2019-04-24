@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.APIs.ArtistAPI
 import com.zeuslmt.lyricslover.R
@@ -38,13 +39,16 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         setContentView(R.layout.activity_new_song)
         supportActionBar?.title = "New Song"
 
+        spinner_album.onItemSelectedListener = this
+        spinner_artist.onItemSelectedListener = this
+
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            != PackageManager.PERMISSION_GRANTED) {
 //            Log.d("abc", "not granted")
 //            ActivityCompat.requestPermissions(this,
 //                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
 //        }
-        getAlbums { setupAlbumSpinner() }
+
         getArtist { setupArtistSpinner() }
 
         button_cancel.setOnClickListener {
@@ -56,7 +60,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
     }
 
-    private fun getAlbums(onComplete: () -> Unit) {
+    private fun getAlbumsByArtist(artistId: String, onComplete: () -> Unit) {
 //        progressBar_song.visibility = View.VISIBLE
         val albumService = AlbumAPI.service
 
@@ -72,21 +76,31 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
                 }
             }
         }
-        albumService.getAllAlbums().enqueue(result)
+        albumService.getAlbumsByArtist(artistId).enqueue(result)
     }
 
     private fun setupAlbumSpinner() {
         val albumNames = ArrayList<String>()
 
-        for (album in albums) {
-            albumNames.add(album.title)
+        if(albums.isNotEmpty()) {
+            for (album in albums) {
+                albumNames.add(album.title)
+            }
+        } else {
+            handleEmptyAlbum()
         }
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, albumNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_album.adapter = adapter
-        spinner_album.onItemSelectedListener = this
+    }
+
+    private fun handleEmptyAlbum() {
+        imageView_artwork.setImageDrawable(getDrawable(R.drawable.artwork_placeholder))
+        Toast.makeText(this, "No album found for this artist, consider adding one!", Toast.LENGTH_LONG).show()
+
+        //checkSaveButtonState()
     }
 
     private fun getArtist(onComplete: () -> Unit) {
@@ -111,15 +125,24 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     private fun setupArtistSpinner() {
         val artistNames = ArrayList<String>()
 
-        for (artist in artists) {
-            artistNames.add(artist.name)
+        if (artists.isNotEmpty()) {
+            for (artist in artists) {
+                artistNames.add(artist.name)
+            }
+        } else {
+            handleEmptyArtist()
         }
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, artistNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_artist.adapter = adapter
-        spinner_artist.onItemSelectedListener = this
+    }
+
+    private fun handleEmptyArtist() {
+        Toast.makeText(this, "Found no album and artist, consider adding one!", Toast.LENGTH_LONG).show()
+
+        //checkSaveButtonState()
     }
 
     private fun getArtwork(urlString: String): Bitmap? {
@@ -136,10 +159,27 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         return result
     }
 
+    private fun setSelectedAlbumArtwork(artwork: String?) {
+        if (artwork != null) {
+            doAsync {
+                val url = getString(R.string.image_url, artwork)
+                val artworkBitmap: Bitmap? = getArtwork(url)
+                uiThread {
+                    imageView_artwork.setImageBitmap(artworkBitmap)
+//                    progressBar.visibility = View.GONE
+                }
+            }
+        } else {
+            imageView_artwork.setImageDrawable(getDrawable(R.drawable.artwork_placeholder))
+        }
+    }
+
     override fun onNothingSelected(parent: AdapterView<*>?) {
+        Log.d("abc", "Nothing selected")
         if(parent!!.id == R.id.spinner_album)
         {
             Log.d("abc", "Nothing selected - album")
+            setSelectedAlbumArtwork(null)
         }
         else if(parent.id == R.id.spinner_artist)
         {
@@ -150,22 +190,15 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if(parent!!.id == R.id.spinner_album)
         {
-            if (albums[position].artwork != null) {
-                doAsync {
-                    val url = getString(R.string.image_url, albums[position].artwork)
-                    val artwork: Bitmap? = getArtwork(url)
-                    uiThread {
-                        imageView_artwork.setImageBitmap(artwork)
-//                    progressBar.visibility = View.GONE
-                    }
-                }
-            } else {
-                imageView_artwork.setImageDrawable(getDrawable(R.drawable.artwork_placeholder))
-            }
+            Log.d("abc", "onItemSelected - album")
+            setSelectedAlbumArtwork(albums[position].artwork)
         }
         else if(parent.id == R.id.spinner_artist)
         {
-            //do this
+            val artistId = artists[position]._id
+            getAlbumsByArtist(artistId) {
+                setupAlbumSpinner()
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 object AlbumAPI {
     //create URL
@@ -15,6 +16,9 @@ object AlbumAPI {
     interface Service {
         @GET(".")
         fun getAllAlbums() : Call<Array<Album>>
+
+        @GET("search")
+        fun getAlbumsByArtist(@Query("artist") artistId: String) : Call<Array<Album>>
     }
 
     //Create and config Retrofit with builder
