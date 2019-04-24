@@ -5,20 +5,18 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="wrap_content">
 
+    <android.support.constraint.Guideline
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline2"
+            app:layout_constraintGuide_percent="0.8"/>
     <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            android:id="@+id/constraintLayout2" app:layout_constraintBottom_toBottomOf="parent"
+    >
 
-        <View
-                android:id="@+id/item_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="64dp"/>
         <TextView
                 android:text="@string/hint_title"
                 android:layout_width="wrap_content"
@@ -55,4 +53,19 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption" android:textStyle="italic"/>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/avatar_placeholder"
+            android:id="@+id/imageView_artist" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2" app:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="8dp" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"/>
+    <View
+            android:id="@+id/item_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"/>
 </android.support.constraint.ConstraintLayout>
