@@ -1,5 +1,6 @@
 package com.zeuslmt.lyricslover.APIs
 
+import com.zeuslmt.lyricslover.models.NewSong
 import com.zeuslmt.lyricslover.models.Song
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -20,7 +21,12 @@ object SongAPI {
 
         @FormUrlEncoded
         @POST(".")
-        fun addNewSong(@Body newSong: Song)
+        fun addNewSong(
+            @Field("title") title: String,
+            @Field("artist") artistId: String,
+            @Field("album") albumId: String,
+            @Field("lyrics") lyrics: String
+        ): Call<NewSong>
     }
 
     //Create and config Retrofit with builder

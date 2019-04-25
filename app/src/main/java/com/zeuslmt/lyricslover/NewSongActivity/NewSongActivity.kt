@@ -2,8 +2,8 @@ package com.zeuslmt.lyricslover.NewSongActivity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -11,17 +11,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.APIs.ArtistAPI
+import com.zeuslmt.lyricslover.APIs.SongAPI
 import com.zeuslmt.lyricslover.R
-import kotlinx.android.synthetic.main.activity_new_song.*
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
+import com.zeuslmt.lyricslover.models.NewSong
+import kotlinx.android.synthetic.main.activity_new_song.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.InputStream
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -56,7 +57,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
 
         button_save.setOnClickListener {
-
+            onSaveButton()
         }
     }
 
@@ -109,7 +110,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
 
         val result = object : Callback<Array<Artist>> {
             override fun onFailure(call: Call<Array<Artist>>, t: Throwable) {
-                Log.d("AlbumService", "Error$t")
+                Log.d("AlbumService", "Error: $t")
             }
 
             override fun onResponse(call: Call<Array<Artist>>?, response: Response<Array<Artist>>?) {
@@ -200,5 +201,27 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
                 setupAlbumSpinner()
             }
         }
+    }
+
+    private fun onSaveButton() {
+        val newSongTitle = textInputLayout_title.editText!!.text.toString()
+        val artistId = artists[spinner_artist.selectedItemPosition]._id
+        val albumId = albums[spinner_album.selectedItemPosition]._id
+        val lyrics = textInputLayout_lyrics.editText!!.text.toString()
+
+        val songService = SongAPI.service
+
+        val result = object : Callback<NewSong> {
+            override fun onFailure(call: Call<NewSong>, t: Throwable) {
+                Log.d("SongService", "Error: $t")
+            }
+
+            override fun onResponse(call: Call<NewSong>?, response: Response<NewSong>?) {
+                if (response != null) {
+                    Log.d("SongService", response.body().toString())
+                }
+            }
+        }
+        songService.addNewSong(newSongTitle, artistId, albumId, lyrics).enqueue(result)
     }
 }

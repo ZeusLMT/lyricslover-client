@@ -13,3 +13,12 @@ data class Song(
         return "Song(_id='$_id', title='$title', artist=$artist, album=$album, lyrics='$lyrics', updatedAt='$updatedAt')"
     }
 }
+
+data class NewSong(
+    val _id: String,
+    val title: String,
+    val artist: String,
+    val album: String,
+    val lyrics: String,
+    val updatedAt: String
+)
