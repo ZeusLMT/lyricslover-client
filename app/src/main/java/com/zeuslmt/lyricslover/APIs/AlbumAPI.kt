@@ -1,12 +1,14 @@
 package com.zeuslmt.lyricslover.APIs
 
+import android.media.Image
 import com.zeuslmt.lyricslover.models.Album
+import com.zeuslmt.lyricslover.models.NewAlbum
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 object AlbumAPI {
     //create URL
@@ -22,6 +24,15 @@ object AlbumAPI {
 
         @GET("{album_id}/artwork")
         fun getArtworkOfAlbum(@Path(value = "album_id", encoded = true) albumId: String) : Call<HashMap<String, String>>
+
+        @Multipart
+        @POST(".")
+        fun addNewAlbum(
+            @Part("title") albumTitle: RequestBody,
+            @Part("artist") artistId: RequestBody,
+            @Part("year") year: RequestBody?,
+            @Part artwork: MultipartBody.Part
+        ): Call<NewAlbum>
     }
 
     //Create and config Retrofit with builder

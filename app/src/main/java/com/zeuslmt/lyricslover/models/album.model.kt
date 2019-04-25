@@ -23,3 +23,11 @@ data class Album(
         return _id.hashCode()
     }
 }
+
+data class NewAlbum(
+    val _id: String,
+    val title: String,
+    val artist: Artist,
+    val year: Int?,
+    val artwork: String?
+)
