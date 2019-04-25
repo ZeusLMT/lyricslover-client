@@ -66,7 +66,7 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
                 }
             }
         } else {
-            holder.progressBar.visibility = View.VISIBLE
+            holder.progressBar.visibility = View.GONE
         }
 
         holder.itemView.setOnClickListener { clickListener(thisAlbum) }
