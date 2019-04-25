@@ -19,6 +19,9 @@ object AlbumAPI {
 
         @GET("search")
         fun getAlbumsByArtist(@Query("artist") artistId: String) : Call<Array<Album>>
+
+        @GET("{album_id}/artwork")
+        fun getArtworkOfAlbum(@Path(value = "album_id", encoded = true) albumId: String) : Call<HashMap<String, String>>
     }
 
     //Create and config Retrofit with builder
