@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -27,7 +29,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+
+class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextWatcher {
     companion object {
         private const val REQUEST_IMAGE_SELECT = 1
     }
@@ -40,8 +44,13 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         setContentView(R.layout.activity_new_song)
         supportActionBar?.title = "New Song"
 
+        checkSaveButtonState()
+
         spinner_album.onItemSelectedListener = this
         spinner_artist.onItemSelectedListener = this
+
+        textInputLayout_title.editText!!.addTextChangedListener(this)
+        textInputLayout_lyrics.editText!!.addTextChangedListener(this)
 
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            != PackageManager.PERMISSION_GRANTED) {
@@ -60,6 +69,70 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             onSaveButton()
         }
     }
+
+    //Overrides for Text Watcher
+
+    override fun afterTextChanged(s: Editable?) {
+
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        checkSaveButtonState()
+    }
+
+
+    //Overrides for Spinner Item Select Listener
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        Log.d("abc", "Nothing selected")
+        if(parent!!.id == R.id.spinner_album)
+        {
+            Log.d("abc", "Nothing selected - album")
+            setSelectedAlbumArtwork(null)
+        }
+        else if(parent.id == R.id.spinner_artist)
+        {
+            Log.d("abc", "Nothing selected - artist")
+        }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if(parent!!.id == R.id.spinner_album)
+        {
+            Log.d("abc", "onItemSelected - album")
+            setSelectedAlbumArtwork(albums[position].artwork)
+        }
+        else if(parent.id == R.id.spinner_artist)
+        {
+            Log.d("abc", "onItemSelected - artist")
+            val artistId = artists[position]._id
+            getAlbumsByArtist(artistId) {
+                setupAlbumSpinner()
+            }
+        }
+    }
+
+    //Private methods
+
+    private fun checkSaveButtonState() {
+        Log.d("abc", "check save button")
+        val emptyTitle = textInputLayout_title.editText!!.text.isBlank()
+        val emptyLyrics = textInputLayout_lyrics.editText!!.text.isBlank()
+        val artistNotSelected = spinner_artist.selectedItem == null
+        val albumNotSelected = spinner_album.selectedItem == null
+
+        Log.d("abc", "$emptyTitle - $emptyLyrics - $artistNotSelected - $albumNotSelected")
+
+        button_save.isEnabled = !(emptyTitle || emptyLyrics || artistNotSelected || albumNotSelected)
+        Log.d("abc", button_save.isEnabled.toString())
+
+        button_save.alpha = if (button_save.isEnabled) 1.toFloat() else 0.3.toFloat()
+    }
+
 
     private fun getAlbumsByArtist(artistId: String, onComplete: () -> Unit) {
 //        progressBar_song.visibility = View.VISIBLE
@@ -83,25 +156,26 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     private fun setupAlbumSpinner() {
         val albumNames = ArrayList<String>()
 
-        if(albums.isNotEmpty()) {
-            for (album in albums) {
-                albumNames.add(album.title)
-            }
-        } else {
-            handleEmptyAlbum()
+        for (album in albums) {
+            albumNames.add(album.title)
         }
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, albumNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         // Apply the adapter to the spinner
         spinner_album.adapter = adapter
+
+        if(albums.isEmpty()) {
+            handleEmptyAlbum()
+        }
     }
 
     private fun handleEmptyAlbum() {
         imageView_artwork.setImageDrawable(getDrawable(R.drawable.artwork_placeholder))
         Toast.makeText(this, "No album found for this artist, consider adding one!", Toast.LENGTH_LONG).show()
 
-        //checkSaveButtonState()
+        checkSaveButtonState()
     }
 
     private fun getArtist(onComplete: () -> Unit) {
@@ -143,7 +217,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     private fun handleEmptyArtist() {
         Toast.makeText(this, "Found no album and artist, consider adding one!", Toast.LENGTH_LONG).show()
 
-        //checkSaveButtonState()
+        checkSaveButtonState()
     }
 
     private fun getArtwork(urlString: String): Bitmap? {
@@ -175,34 +249,6 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        Log.d("abc", "Nothing selected")
-        if(parent!!.id == R.id.spinner_album)
-        {
-            Log.d("abc", "Nothing selected - album")
-            setSelectedAlbumArtwork(null)
-        }
-        else if(parent.id == R.id.spinner_artist)
-        {
-            Log.d("abc", "Nothing selected - artist")
-        }
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if(parent!!.id == R.id.spinner_album)
-        {
-            Log.d("abc", "onItemSelected - album")
-            setSelectedAlbumArtwork(albums[position].artwork)
-        }
-        else if(parent.id == R.id.spinner_artist)
-        {
-            val artistId = artists[position]._id
-            getAlbumsByArtist(artistId) {
-                setupAlbumSpinner()
-            }
-        }
-    }
-
     private fun onSaveButton() {
         val newSongTitle = textInputLayout_title.editText!!.text.toString()
         val artistId = artists[spinner_artist.selectedItemPosition]._id
@@ -223,5 +269,6 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             }
         }
         songService.addNewSong(newSongTitle, artistId, albumId, lyrics).enqueue(result)
+        finish()
     }
 }

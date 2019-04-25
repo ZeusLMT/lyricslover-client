@@ -15,6 +15,8 @@
     <string name="hint_album">Album</string>
     <string name="hint_lyrics">Lyrics</string>
     <string name="hint_update">dd/mm/yyyy</string>
+    <string name="textView_numberOfTracks">%1$d song(s)</string>
+    <string name="textView_numberOfAlbums">%1$d album(s)</string>
     <string name="textView_year">yyyy</string>
 
     <string name="button_label_save">Save</string>
