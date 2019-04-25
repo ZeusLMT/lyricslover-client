@@ -3,6 +3,8 @@ package com.zeuslmt.lyricslover.NewSongActivity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,11 +16,14 @@ import android.widget.Toast
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.APIs.ArtistAPI
 import com.zeuslmt.lyricslover.APIs.SongAPI
+import com.zeuslmt.lyricslover.NewSongActivity.dialogs.NewArtistDialog
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
 import com.zeuslmt.lyricslover.models.NewSong
 import kotlinx.android.synthetic.main.activity_new_song.*
+import kotlinx.android.synthetic.main.dialog_new_artist.*
+import org.jetbrains.anko.AlertDialogBuilder
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Call
@@ -31,9 +36,11 @@ import java.net.URL
 
 
 
-class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextWatcher {
+class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextWatcher, NewArtistDialog.NoticeDialogListener {
     companion object {
         private const val REQUEST_IMAGE_SELECT = 1
+        private const val NEW_ARTIST_DIALOG_TAG = "NewArtistDialog"
+        private const val NEW_ALBUM_DIALOG_TAG = "NewAlbumDialog"
     }
 
     private var albums: Array<Album> = emptyArray()
@@ -68,6 +75,11 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         button_save.setOnClickListener {
             onSaveButton()
         }
+
+        button_newArtist.setOnClickListener {
+            val newArtistDialog = NewArtistDialog()
+            newArtistDialog.show(supportFragmentManager, NEW_ARTIST_DIALOG_TAG)
+        }
     }
 
     //Overrides for Text Watcher
@@ -92,7 +104,6 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         if(parent!!.id == R.id.spinner_album)
         {
             Log.d("abc", "Nothing selected - album")
-            setSelectedAlbumArtwork(null)
         }
         else if(parent.id == R.id.spinner_artist)
         {
@@ -114,7 +125,25 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 setupAlbumSpinner()
             }
         }
+        checkSaveButtonState()
     }
+
+    //Override for Dialogs Listener
+
+    override fun onDialogPositiveClick(dialog: DialogFragment, bundle: Bundle) {
+        when (dialog.tag) {
+            NEW_ALBUM_DIALOG_TAG -> {
+
+            }
+
+            NEW_ARTIST_DIALOG_TAG -> {
+                val artistName = bundle.getString("name")
+                Log.d("abc", "New artist name: $artistName")
+                createNewArtist(artistName)
+            }
+        }
+    }
+
 
     //Private methods
 
@@ -269,6 +298,24 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             }
         }
         songService.addNewSong(newSongTitle, artistId, albumId, lyrics).enqueue(result)
+        finish()
+    }
+
+    private fun createNewArtist(artistName: String) {
+        val artistService = ArtistAPI.service
+
+        val result = object : Callback<NewSong> {
+            override fun onFailure(call: Call<NewSong>, t: Throwable) {
+                Log.d("SongService", "Error: $t")
+            }
+
+            override fun onResponse(call: Call<NewSong>?, response: Response<NewSong>?) {
+                if (response != null) {
+                    Log.d("SongService", response.body().toString())
+                }
+            }
+        }
+        artistService.addNewArtist().enqueue(result)
         finish()
     }
 }

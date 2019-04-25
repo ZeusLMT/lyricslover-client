@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp" android:id="@+id/linearLayout_artist"
-                app:layout_constraintEnd_toStartOf="@+id/button5" android:layout_marginEnd="8dp">
+                app:layout_constraintEnd_toStartOf="@+id/button_newArtist" android:layout_marginEnd="8dp">
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         </LinearLayout>
         <ImageButton
                 android:layout_width="0dp"
-                android:layout_height="0dp" android:id="@+id/button5"
+                android:layout_height="0dp" android:id="@+id/button_newArtist"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toTopOf="@+id/linearLayout_artist"
                 style="@android:style/Widget.DeviceDefault.ImageButton"
@@ -79,7 +79,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp" android:id="@+id/linearLayout_album"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout_artist" android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/button6" android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/button_newAlbum" android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline3">
             <TextView
                     android:layout_width="match_parent"
@@ -92,7 +92,7 @@
         </LinearLayout>
         <ImageButton
                 android:layout_width="0dp"
-                android:layout_height="0dp" android:id="@+id/button6" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="0dp" android:id="@+id/button_newAlbum" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 style="@android:style/Widget.DeviceDefault.ImageButton"
                 android:src="@drawable/plus" android:background="?attr/selectableItemBackgroundBorderless"
@@ -133,14 +133,15 @@
             android:id="@+id/constraintLayout_buttons">
 
         <ImageButton
-                android:text="@android:string/cancel"
+                android:text="@string/button_label_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/button_cancel"
                 app:layout_constraintEnd_toStartOf="@+id/guideline" android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 style="@style/Widget.AppCompat.ImageButton"
-                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/cancel"/>
+                android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/cancel"
+                android:contentDescription="@string/button_label_cancel"/>
         <android.support.constraint.Guideline
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
@@ -155,6 +156,7 @@
                 android:layout_marginStart="8dp" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 style="@android:style/Widget.DeviceDefault.ImageButton" android:src="@drawable/checkmark"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/button_label_save"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

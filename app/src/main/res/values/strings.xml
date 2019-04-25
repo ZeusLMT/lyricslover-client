@@ -12,16 +12,23 @@
 
     <string name="hint_title">Song title</string>
     <string name="hint_artist">Artist</string>
+    <string name="hint_artist_name">Artist name</string>
     <string name="hint_album">Album</string>
     <string name="hint_lyrics">Lyrics</string>
     <string name="hint_update">dd/mm/yyyy</string>
+
     <string name="textView_numberOfTracks">%1$d song(s)</string>
     <string name="textView_numberOfAlbums">%1$d album(s)</string>
     <string name="textView_year">yyyy</string>
 
     <string name="button_label_save">Save</string>
-    <string name="button_label_addArtist">New Artist</string>
-    <string name="button_label_AddAlbum">New Album</string>
+    <string name="button_label_cancel">Cancel</string>
+
+
+    <string name="dialog_title_newArtist">Add new artist</string>
+    <string name="dialog_title_newAlbum">Add new album</string>
+
+    <string name="error_empty_artistName">Artist name should not be empty!</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
