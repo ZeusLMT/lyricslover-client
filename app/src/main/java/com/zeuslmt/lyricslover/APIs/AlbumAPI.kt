@@ -31,7 +31,7 @@ object AlbumAPI {
             @Part("title") albumTitle: RequestBody,
             @Part("artist") artistId: RequestBody,
             @Part("year") year: RequestBody?,
-            @Part artwork: MultipartBody.Part
+            @Part artwork: MultipartBody.Part?
         ): Call<NewAlbum>
     }
 

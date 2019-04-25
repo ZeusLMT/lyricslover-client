@@ -27,7 +27,7 @@ data class Album(
 data class NewAlbum(
     val _id: String,
     val title: String,
-    val artist: Artist,
-    val year: Int?,
+    val artist: String,
+    val year: String?,
     val artwork: String?
 )

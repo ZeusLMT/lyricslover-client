@@ -1,9 +1,13 @@
 package com.zeuslmt.lyricslover.NewSongActivity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -16,14 +20,14 @@ import android.widget.Toast
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.APIs.ArtistAPI
 import com.zeuslmt.lyricslover.APIs.SongAPI
+import com.zeuslmt.lyricslover.NewSongActivity.dialogs.NewAlbumDialog
 import com.zeuslmt.lyricslover.NewSongActivity.dialogs.NewArtistDialog
 import com.zeuslmt.lyricslover.R
-import com.zeuslmt.lyricslover.models.Album
-import com.zeuslmt.lyricslover.models.Artist
-import com.zeuslmt.lyricslover.models.NewArtist
-import com.zeuslmt.lyricslover.models.NewSong
+import com.zeuslmt.lyricslover.models.*
 import kotlinx.android.synthetic.main.activity_new_song.*
 import kotlinx.android.synthetic.main.dialog_new_artist.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import org.jetbrains.anko.AlertDialogBuilder
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -37,9 +41,8 @@ import java.net.URL
 
 
 
-class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextWatcher, NewArtistDialog.NoticeDialogListener {
+class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextWatcher, NewArtistDialog.NoticeDialogListener, NewAlbumDialog.NoticeDialogListener {
     companion object {
-        private const val REQUEST_IMAGE_SELECT = 1
         private const val NEW_ARTIST_DIALOG_TAG = "NewArtistDialog"
         private const val NEW_ALBUM_DIALOG_TAG = "NewAlbumDialog"
     }
@@ -60,14 +63,18 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         textInputLayout_title.editText!!.addTextChangedListener(this)
         textInputLayout_lyrics.editText!!.addTextChangedListener(this)
 
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//            != PackageManager.PERMISSION_GRANTED) {
-//            Log.d("abc", "not granted")
-//            ActivityCompat.requestPermissions(this,
-//                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-//        }
+        //Check for Write permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+            Log.d("abc", "not granted")
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+        }
 
+        //Set up artist spinner
         getArtist { setupArtistSpinner(null) }
+
+        //Buttons' onClickListeners
 
         button_cancel.setOnClickListener {
             finish()
@@ -80,6 +87,11 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         button_newArtist.setOnClickListener {
             val newArtistDialog = NewArtistDialog()
             newArtistDialog.show(supportFragmentManager, NEW_ARTIST_DIALOG_TAG)
+        }
+
+        button_newAlbum.setOnClickListener {
+            val newAlbumDialog = NewAlbumDialog()
+            newAlbumDialog.show(supportFragmentManager, NEW_ALBUM_DIALOG_TAG)
         }
     }
 
@@ -134,7 +146,13 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     override fun onDialogPositiveClick(dialog: DialogFragment, bundle: Bundle) {
         when (dialog.tag) {
             NEW_ALBUM_DIALOG_TAG -> {
+                val albumTitle = bundle.getString("title")
+                val artistId = bundle.getString("artist")
+                val year = bundle.getString("year")
+                val artwork = bundle.getString("artwork")
+                Log.d("abc", "title: $albumTitle, artistID: $artistId, year: $year, artwork: $artwork")
 
+                createNewAlbum(albumTitle!!, artistId!!, year, artwork)
             }
 
             NEW_ARTIST_DIALOG_TAG -> {
@@ -209,7 +227,6 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     }
 
     private fun getArtist(onComplete: () -> Unit) {
-//        progressBar_song.visibility = View.VISIBLE
         val artistService = ArtistAPI.service
 
         val result = object : Callback<Array<Artist>> {
@@ -311,12 +328,12 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         val result = object : Callback<NewArtist> {
             override fun onFailure(call: Call<NewArtist>, t: Throwable) {
-                Log.d("SongService", "Error: $t")
+                Log.d("ArtistService", "Error: $t")
             }
 
             override fun onResponse(call: Call<NewArtist>?, response: Response<NewArtist>?) {
                 if (response != null) {
-                    Log.d("SongService", response.body().toString())
+                    Log.d("ArtistService", response.body().toString())
                     val newArtistId = response.body()!!._id
 
                     //refresh artist list and auto-select the newly created artist
@@ -333,5 +350,30 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             }
         }
         artistService.addNewArtist(artistName).enqueue(result)
+    }
+
+    private fun createNewAlbum(albumTitle: String, artistId: String, year : String?, artwork: String?) {
+        val albumService = AlbumAPI.service
+
+        val result = object : Callback<NewAlbum> {
+            override fun onFailure(call: Call<NewAlbum>, t: Throwable) {
+                Log.d("AlbumService", "Error: $t")
+            }
+
+            override fun onResponse(call: Call<NewAlbum>?, response: Response<NewAlbum>?) {
+                if (response != null) {
+                    Log.d("AlbumService", response.body().toString())
+                }
+            }
+        }
+
+        val reqBodyTitle = RequestBody.create(MediaType.parse("text/plain"), albumTitle)
+        val reqBodyArtist = RequestBody.create(MediaType.parse("text/plain"), artistId)
+        if (year != null) {
+            val reqBodyYear = RequestBody.create(MediaType.parse("text/plain"), year)
+            albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, reqBodyYear, null).enqueue(result)
+        } else {
+            albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, null, null).enqueue(result)
+        }
     }
 }

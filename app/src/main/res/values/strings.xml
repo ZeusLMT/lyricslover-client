@@ -14,8 +14,10 @@
     <string name="hint_artist">Artist</string>
     <string name="hint_artist_name">Artist name</string>
     <string name="hint_album">Album</string>
+    <string name="hint_album_title">Album title</string>
     <string name="hint_lyrics">Lyrics</string>
-    <string name="hint_update">dd/mm/yyyy</string>
+    <string name="hint_year">Release year</string>
+    <string name="hint_artwork">Add artwork</string>
 
     <string name="textView_numberOfTracks">%1$d song(s)</string>
     <string name="textView_numberOfAlbums">%1$d album(s)</string>
@@ -29,6 +31,7 @@
     <string name="dialog_title_newAlbum">Add new album</string>
 
     <string name="error_empty_artistName">Artist name should not be empty!</string>
+    <string name="error_empty_albumName">Album title should not be empty!</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
