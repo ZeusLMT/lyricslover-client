@@ -21,3 +21,6 @@ data class Artist(
         return _id.hashCode()
     }
 }
+
+data class NewArtist (val _id: String,
+                      val name: String)

@@ -20,6 +20,7 @@ import com.zeuslmt.lyricslover.NewSongActivity.dialogs.NewArtistDialog
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
+import com.zeuslmt.lyricslover.models.NewArtist
 import com.zeuslmt.lyricslover.models.NewSong
 import kotlinx.android.synthetic.main.activity_new_song.*
 import kotlinx.android.synthetic.main.dialog_new_artist.*
@@ -66,7 +67,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 //                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
 //        }
 
-        getArtist { setupArtistSpinner() }
+        getArtist { setupArtistSpinner(null) }
 
         button_cancel.setOnClickListener {
             finish()
@@ -139,7 +140,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             NEW_ARTIST_DIALOG_TAG -> {
                 val artistName = bundle.getString("name")
                 Log.d("abc", "New artist name: $artistName")
-                createNewArtist(artistName)
+                createNewArtist(artistName!!)
             }
         }
     }
@@ -226,7 +227,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         artistService.getAllArtists().enqueue(result)
     }
 
-    private fun setupArtistSpinner() {
+    private fun setupArtistSpinner(setSelectionManually: (() -> Unit)?) {
         val artistNames = ArrayList<String>()
 
         if (artists.isNotEmpty()) {
@@ -241,6 +242,10 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_artist.adapter = adapter
+
+        if (setSelectionManually != null) {
+            setSelectionManually()
+        }
     }
 
     private fun handleEmptyArtist() {
@@ -304,18 +309,29 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     private fun createNewArtist(artistName: String) {
         val artistService = ArtistAPI.service
 
-        val result = object : Callback<NewSong> {
-            override fun onFailure(call: Call<NewSong>, t: Throwable) {
+        val result = object : Callback<NewArtist> {
+            override fun onFailure(call: Call<NewArtist>, t: Throwable) {
                 Log.d("SongService", "Error: $t")
             }
 
-            override fun onResponse(call: Call<NewSong>?, response: Response<NewSong>?) {
+            override fun onResponse(call: Call<NewArtist>?, response: Response<NewArtist>?) {
                 if (response != null) {
                     Log.d("SongService", response.body().toString())
+                    val newArtistId = response.body()!!._id
+
+                    //refresh artist list and auto-select the newly created artist
+                    getArtist {
+                        setupArtistSpinner {
+                            for ((index, artist) in artists.withIndex()) {
+                                if (artist._id == newArtistId) {
+                                    spinner_artist.setSelection(index)
+                                }
+                            }
+                    }
+                    }
                 }
             }
         }
-        artistService.addNewArtist().enqueue(result)
-        finish()
+        artistService.addNewArtist(artistName).enqueue(result)
     }
 }

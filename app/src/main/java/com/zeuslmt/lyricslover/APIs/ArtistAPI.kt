@@ -1,11 +1,11 @@
 package com.zeuslmt.lyricslover.APIs
 
 import com.zeuslmt.lyricslover.models.Artist
+import com.zeuslmt.lyricslover.models.NewArtist
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 object ArtistAPI {
     //create URL
@@ -15,6 +15,12 @@ object ArtistAPI {
     interface Service {
         @GET(".")
         fun getAllArtists() : Call<Array<Artist>>
+
+        @FormUrlEncoded
+        @POST(".")
+        fun addNewArtist(
+            @Field("name") artistName: String
+        ): Call<NewArtist>
     }
 
     //Create and config Retrofit with builder
