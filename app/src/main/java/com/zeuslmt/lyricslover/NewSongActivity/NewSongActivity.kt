@@ -50,6 +50,10 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     private var albums: Array<Album> = emptyArray()
     private var artists: Array<Artist> = emptyArray()
 
+    private var newAlbumId = ""
+    private var isAlbumJustCreated = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_song)
@@ -135,7 +139,19 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             Log.d("abc", "onItemSelected - artist")
             val artistId = artists[position]._id
             getAlbumsByArtist(artistId) {
-                setupAlbumSpinner()
+                if (!isAlbumJustCreated) {
+                    setupAlbumSpinner(null)
+                } else {
+                    setupAlbumSpinner {
+                        for ((index, album) in albums.withIndex()) {
+                            if (album._id == newAlbumId) {
+                                spinner_album.setSelection(index)
+                            }
+                        }
+                    }
+                    isAlbumJustCreated = false
+                }
+
             }
         }
         checkSaveButtonState()
@@ -201,7 +217,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         albumService.getAlbumsByArtist(artistId).enqueue(result)
     }
 
-    private fun setupAlbumSpinner() {
+    private fun setupAlbumSpinner(setSelectionManually: (() -> Unit)?) {
         val albumNames = ArrayList<String>()
 
         for (album in albums) {
@@ -216,6 +232,10 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         if(albums.isEmpty()) {
             handleEmptyAlbum()
+        }
+
+        if (setSelectionManually != null) {
+            setSelectionManually()
         }
     }
 
@@ -344,7 +364,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                                     spinner_artist.setSelection(index)
                                 }
                             }
-                    }
+                        }
                     }
                 }
             }
@@ -362,7 +382,22 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
             override fun onResponse(call: Call<NewAlbum>?, response: Response<NewAlbum>?) {
                 if (response != null) {
+                    isAlbumJustCreated = true
                     Log.d("AlbumService", response.body().toString())
+
+                    val newArtistId = response.body()!!.artist
+                    newAlbumId = response.body()!!._id
+
+                    //refresh artist and album lists then auto-select the newly created album
+                    getArtist {
+                        setupArtistSpinner {
+                            for ((index, artist) in artists.withIndex()) {
+                                if (artist._id == newArtistId) {
+                                    spinner_artist.setSelection(index)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
