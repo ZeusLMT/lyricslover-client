@@ -2,6 +2,7 @@ package com.zeuslmt.lyricslover.APIs
 
 import com.zeuslmt.lyricslover.models.Artist
 import com.zeuslmt.lyricslover.models.NewArtist
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,6 +22,9 @@ object ArtistAPI {
         fun addNewArtist(
             @Field("name") artistName: String
         ): Call<NewArtist>
+
+        @DELETE("{artist_id}")
+        fun deleteArtistById(@Path(value = "artist_id", encoded = true) id: String) : Call<ResponseBody>
     }
 
     //Create and config Retrofit with builder

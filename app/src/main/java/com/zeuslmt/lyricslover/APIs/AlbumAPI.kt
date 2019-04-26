@@ -1,10 +1,10 @@
 package com.zeuslmt.lyricslover.APIs
 
-import android.media.Image
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.NewAlbum
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,6 +33,9 @@ object AlbumAPI {
             @Part("year") year: RequestBody?,
             @Part artwork: MultipartBody.Part?
         ): Call<NewAlbum>
+
+        @DELETE("{album_id}")
+        fun deleteAlbumById(@Path(value = "album_id", encoded = true) id: String) : Call<ResponseBody>
     }
 
     //Create and config Retrofit with builder

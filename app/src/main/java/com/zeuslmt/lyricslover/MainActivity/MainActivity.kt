@@ -1,23 +1,21 @@
 package com.zeuslmt.lyricslover.MainActivity
 
 import android.content.Intent
+import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
-
-import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
-import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 import com.zeuslmt.lyricslover.SongDetailsActivity.SongDetailsActivity
 import com.zeuslmt.lyricslover.fragments.fragment_songs.AlbumsFragment
 import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentArtists
 import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
 import com.zeuslmt.lyricslover.models.Song
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, AlbumsFragment.AlbumsFragListener, FragmentArtists.ArtistsFragListener {

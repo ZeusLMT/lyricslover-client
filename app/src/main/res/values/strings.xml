@@ -27,6 +27,7 @@
 
     <string name="button_label_save">Save</string>
     <string name="button_label_cancel">Cancel</string>
+    <string name="button_label_ok">OK</string>
 
 
     <string name="dialog_title_newArtist">Add new artist</string>

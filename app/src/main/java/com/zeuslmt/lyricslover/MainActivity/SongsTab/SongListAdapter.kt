@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Song
 
-class SongListAdapter (private val appContext: Context, val clickListener: (Song) -> Unit ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SongListAdapter (private val appContext: Context, val clickListener: (Song) -> Unit, val longClickListener: (Song) -> Boolean ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dataset: Array<Song> = emptyArray()
 
     //ViewHolder class
@@ -47,6 +47,8 @@ class SongListAdapter (private val appContext: Context, val clickListener: (Song
         }
 
         holder.itemView.setOnClickListener { clickListener(thisSong) }
+
+        holder.itemView.setOnLongClickListener { longClickListener(thisSong) }
     }
 
     fun setData(newData: Array<Song>) {

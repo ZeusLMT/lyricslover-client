@@ -16,11 +16,10 @@ import com.zeuslmt.lyricslover.models.Album
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.InputStream
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AlbumGridAdapter (private val appContext: Context, val clickListener: (Album) -> Unit ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AlbumGridAdapter (private val appContext: Context, val clickListener: (Album) -> Unit, val longClickListener: (Album) -> Boolean ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dataset: Array<Album> = emptyArray()
 
     //ViewHolder class
@@ -70,6 +69,8 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
         }
 
         holder.itemView.setOnClickListener { clickListener(thisAlbum) }
+
+        holder.itemView.setOnLongClickListener { longClickListener(thisAlbum) }
     }
 
     fun setData(newData: Array<Album>) {

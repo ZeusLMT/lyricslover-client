@@ -20,7 +20,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class ArtistListAdapter (private val appContext: Context, val clickListener: (Artist) -> Unit ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArtistListAdapter (private val appContext: Context, val clickListener: (Artist) -> Unit, val longClickListener: (Artist) -> Boolean ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dataset: Array<Artist> = emptyArray()
 
     //ViewHolder class
@@ -73,6 +73,8 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
         }
 
         holder.itemView.setOnClickListener { clickListener(thisArtist) }
+
+        holder.itemView.setOnLongClickListener { longClickListener(thisArtist) }
     }
 
     fun setData(newData: Array<Artist>) {
