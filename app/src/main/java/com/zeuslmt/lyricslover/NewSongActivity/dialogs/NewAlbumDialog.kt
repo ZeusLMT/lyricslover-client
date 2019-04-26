@@ -132,7 +132,6 @@ class NewAlbumDialog : DialogFragment() {
         } else {
             handleEmptyArtist()
         }
-        Toast.makeText(activity, "Test toast", Toast.LENGTH_SHORT).show()
 
         val adapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, artistNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

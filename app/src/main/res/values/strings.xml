@@ -9,6 +9,7 @@
 
     <string name="artwork_description">Album artwork</string>
     <string name="artist_description">Artist avatar</string>
+    <string name="background_description">Blurred artwork used as background</string>
 
     <string name="hint_title">Song title</string>
     <string name="hint_artist">Artist</string>
@@ -22,6 +23,7 @@
     <string name="textView_numberOfTracks">%1$d song(s)</string>
     <string name="textView_numberOfAlbums">%1$d album(s)</string>
     <string name="textView_year">yyyy</string>
+    <string name="textView_updatedAt">Song details updated at: %1$s</string>
 
     <string name="button_label_save">Save</string>
     <string name="button_label_cancel">Cancel</string>

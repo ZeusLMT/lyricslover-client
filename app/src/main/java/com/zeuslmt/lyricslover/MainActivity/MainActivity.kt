@@ -11,6 +11,7 @@ import android.view.MenuItem
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
+import com.zeuslmt.lyricslover.SongDetailsActivity.SongDetailsActivity
 import com.zeuslmt.lyricslover.fragments.fragment_songs.AlbumsFragment
 import com.zeuslmt.lyricslover.fragments.fragment_songs.FragmentArtists
 import com.zeuslmt.lyricslover.models.Album
@@ -79,6 +80,9 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
     //Listeners from fragments
     override fun onSongClick(item: Song) {
         Log.d("SongListener", item.title)
+        val intent = Intent(this, SongDetailsActivity::class.java).apply {}
+        intent.putExtra("_id", item._id)
+        startActivity(intent)
     }
 
     override fun onAlbumClick(item: Album) {

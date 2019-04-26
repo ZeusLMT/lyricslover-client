@@ -52,7 +52,7 @@ class SongsFragment : Fragment() {
 
         val result = object : Callback<Array<Song>> {
             override fun onFailure(call: Call<Array<Song>>, t: Throwable) {
-                Log.d("SongService", "Error$t")
+                Log.d("SongService", "Error: $t")
             }
 
             override fun onResponse(call: Call<Array<Song>>?, response: Response<Array<Song>>?) {

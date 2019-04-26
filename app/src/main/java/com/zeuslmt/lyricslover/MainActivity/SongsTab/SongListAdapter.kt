@@ -16,7 +16,7 @@ class SongListAdapter (private val appContext: Context, val clickListener: (Song
     class ListViewHolder (private val itemView: View,
                           val songTitle: TextView = itemView.findViewById(R.id.textView_songTitle),
                           val artistName: TextView = itemView.findViewById(R.id.textView_artist),
-                          val albumName: TextView = itemView.findViewById(R.id.textView_year),
+                          val albumName: TextView = itemView.findViewById(R.id.textView_album),
                           val horizontalDivider: View = itemView.findViewById(R.id.album_artist_divider),
                           val itemDivider: View = itemView.findViewById(R.id.item_divider)) : RecyclerView.ViewHolder(itemView)
 

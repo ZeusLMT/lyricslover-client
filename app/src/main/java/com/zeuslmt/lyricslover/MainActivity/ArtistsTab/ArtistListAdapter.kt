@@ -106,7 +106,7 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
             result = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
         } catch (e: Exception) {
-            Log.d("artworkDebug", "$e")
+            Log.d("ArtworkDebug", "$e")
         }
         return result
     }
