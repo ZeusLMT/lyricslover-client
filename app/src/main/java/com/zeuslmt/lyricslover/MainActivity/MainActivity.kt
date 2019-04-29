@@ -17,6 +17,11 @@ import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
 import com.zeuslmt.lyricslover.models.Song
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.ViewGroup
+import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.AppBarLayout
+
+
 
 class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, AlbumsFragment.AlbumsFragListener, FragmentArtists.ArtistsFragListener {
 
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
+        setAppBarHeight()
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -45,9 +51,6 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-
-
-
         button_add.setOnClickListener {
             val intent = Intent(this, NewSongActivity::class.java).apply {}
             startActivity(intent)
@@ -55,24 +58,29 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
 
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    private fun setAppBarHeight() {
+        val appBarLayout = findViewById<AppBarLayout>(R.id.appbar)
+        appBarLayout.layoutParams = CoordinatorLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            2*getStatusBarHeight() + dpToPx(48 + 56)
+        )
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        if (id == R.id.action_settings) {
-            return true
+    private fun getStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId)
         }
+        Log.d("abc", "Statusbar: $result")
+        return result
+    }
 
-        return super.onOptionsItemSelected(item)
+    private fun dpToPx(dp: Int): Int {
+        val density = resources
+            .displayMetrics
+            .density
+        return Math.round(dp.toFloat() * density)
     }
 
     //Listeners from fragments
