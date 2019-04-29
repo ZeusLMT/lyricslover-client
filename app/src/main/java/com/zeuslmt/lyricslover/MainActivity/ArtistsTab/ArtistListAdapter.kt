@@ -13,6 +13,8 @@ import android.widget.TextView
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Artist
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +22,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class ArtistListAdapter (private val appContext: Context, val clickListener: (Artist) -> Unit, val longClickListener: (Artist) -> Boolean ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArtistListAdapter (private val appContext: Context, val clickListener: (Artist) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dataset: Array<Artist> = emptyArray()
 
     //ViewHolder class
@@ -48,18 +50,9 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
         holder.albumsCount.text = appContext.getString(R.string.textView_numberOfAlbums, thisArtist.albums!!.size)
 
         if (thisArtist.albums.isNotEmpty()) {
-            getArtworkFromAlbum(thisArtist.albums[0]._id)
-
-//            if (albumArtwork != null) {
-//                Log.d("abc", "artwork not null")
-//                doAsync {
-//                    val url = appContext.getString(R.string.image_url, albumArtwork)
-//                    val artwork: Bitmap? = getArtwork(url)
-//                    uiThread {
-//                        holder.artistAvatar.setImageBitmap(artwork)
-//                    }
-//                }
-//            }
+            getArtworkFromAlbum(thisArtist.albums[0]._id) { artwork ->
+                holder.artistAvatar.setImageBitmap(artwork)
+            }
         }
 
         if (thisArtist.songs == null) {
@@ -73,8 +66,6 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
         }
 
         holder.itemView.setOnClickListener { clickListener(thisArtist) }
-
-        holder.itemView.setOnLongClickListener { longClickListener(thisArtist) }
     }
 
     fun setData(newData: Array<Artist>) {
@@ -82,7 +73,7 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
         notifyDataSetChanged()
     }
 
-    private fun getArtworkFromAlbum(albumId: String) {
+    private fun getArtworkFromAlbum(albumId: String, onResult: (Bitmap?) -> Unit) {
         val albumService = AlbumAPI.service
 
         val result = object : Callback<HashMap<String, String>> {
@@ -93,6 +84,17 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
             override fun onResponse(call: Call<HashMap<String, String>>?, response: Response<HashMap<String, String>>?) {
                 if (response != null) {
                     Log.d("AlbumService", "Artwork: ${response.body()}")
+                    val artworkPath = response.body()!!["artwork"]
+
+                    if (artworkPath != null) {
+                        doAsync {
+                            val url = appContext.getString(R.string.image_url, artworkPath)
+                            val artwork: Bitmap? = getArtwork(url)
+                            uiThread {
+                                onResult(artwork)
+                            }
+                        }
+                    }
                 }
             }
         }

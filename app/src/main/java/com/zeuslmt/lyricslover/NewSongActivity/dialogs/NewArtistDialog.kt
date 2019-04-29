@@ -12,6 +12,8 @@ import com.zeuslmt.lyricslover.R
 
 class NewArtistDialog : DialogFragment() {
     private lateinit var listener: NoticeDialogListener
+    private var isEdit = false
+    private var currentName = ""
 
     interface NoticeDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment, bundle: Bundle)
@@ -45,18 +47,22 @@ class NewArtistDialog : DialogFragment() {
         d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val artistTIL = dialog.findViewById<TextInputLayout>(R.id.textInputLayout_artistName)
             val artistName = artistTIL.editText!!.text.toString()
-            if (artistName.isBlank()) {
-                Log.d("abc", "isBlank")
-                artistTIL.error = getString(R.string.error_empty_artistName)
-            } else {
-                val bundle = Bundle()
-                bundle.putString("name", artistName)
-                listener.onDialogPositiveClick(this, bundle)
-                dismiss()
+            when {
+                artistName.isBlank() -> {
+                    Log.d("abc", "isBlank")
+                    artistTIL.error = getString(R.string.error_empty_artistName)
+                }
+
+                artistName == currentName -> dismiss()
+
+                else -> {
+                    val bundle = Bundle()
+                    bundle.putString("name", artistName)
+                    listener.onDialogPositiveClick(this, bundle)
+                    dismiss()
+                }
             }
         }
-
-        val imageViewArtwork = d.findViewById<ImageView>(R.id.imageView_newArtwork)
     }
 
     override fun onAttach(context: Context) {
