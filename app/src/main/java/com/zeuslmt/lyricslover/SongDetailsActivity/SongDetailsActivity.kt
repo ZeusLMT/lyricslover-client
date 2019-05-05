@@ -1,5 +1,6 @@
 package com.zeuslmt.lyricslover.SongDetailsActivity
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.View
 import com.zeuslmt.lyricslover.APIs.AlbumAPI
 import com.zeuslmt.lyricslover.APIs.SongAPI
+import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Song
 import jp.wasabeef.blurry.Blurry
@@ -25,6 +27,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class SongDetailsActivity : AppCompatActivity() {
+    private lateinit var songId: String
     private lateinit var song: Song
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +35,22 @@ class SongDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_song_details)
         textView_lyrics.movementMethod = ScrollingMovementMethod()
 
-        val songId = intent.getStringExtra("_id")
-        getSong(songId)
+        songId = intent.getStringExtra("_id")
+
+        btn_edit.setOnClickListener {
+            val intent = Intent(this, NewSongActivity::class.java).apply {}
+            intent.putExtra("_id", songId)
+            intent.putExtra("editMode", true)
+            startActivity(intent)
+        }
     }
 
-
-
+    override fun onResume() {
+        super.onResume()
+        if (songId.isNotEmpty()) {
+            getSong(songId)
+        }
+    }
 
     private fun getSong(songId: String) {
         val songService = SongAPI.service

@@ -2,11 +2,12 @@ package com.zeuslmt.lyricslover.MainActivity
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.ViewGroup
 import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
@@ -17,10 +18,6 @@ import com.zeuslmt.lyricslover.models.Album
 import com.zeuslmt.lyricslover.models.Artist
 import com.zeuslmt.lyricslover.models.Song
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.ViewGroup
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.AppBarLayout
-
 
 
 class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, AlbumsFragment.AlbumsFragListener, FragmentArtists.ArtistsFragListener {

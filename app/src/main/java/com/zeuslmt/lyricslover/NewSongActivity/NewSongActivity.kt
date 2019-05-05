@@ -53,6 +53,9 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     private var newAlbumId = ""
     private var isAlbumJustCreated = false
 
+    private var editMode = false
+    private lateinit var editSong: Song
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,16 +70,15 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         textInputLayout_title.editText!!.addTextChangedListener(this)
         textInputLayout_lyrics.editText!!.addTextChangedListener(this)
 
-        //Check for Write permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-            Log.d("abc", "not granted")
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-        }
+        editMode = intent.getBooleanExtra("editMode", false)
 
-        //Set up artist spinner
-        getArtist { setupArtistSpinner(null) }
+        //Set up artist and album spinner
+        if (editMode) {
+            val songId = intent.getStringExtra("_id")
+            getSongDetails(songId)
+        } else {
+            getArtist { setupArtistSpinner(null) }
+        }
 
         //Buttons' onClickListeners
 
@@ -94,6 +96,14 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         }
 
         button_newAlbum.setOnClickListener {
+            //Check for Write permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                Log.d("abc", "not granted")
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            }
+
             val newAlbumDialog = NewAlbumDialog()
             newAlbumDialog.show(supportFragmentManager, NEW_ALBUM_DIALOG_TAG)
         }
@@ -139,17 +149,31 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             Log.d("abc", "onItemSelected - artist")
             val artistId = artists[position]._id
             getAlbumsByArtist(artistId) {
-                if (!isAlbumJustCreated) {
-                    setupAlbumSpinner(null)
-                } else {
-                    setupAlbumSpinner {
-                        for ((index, album) in albums.withIndex()) {
-                            if (album._id == newAlbumId) {
-                                spinner_album.setSelection(index)
+                when {
+                    isAlbumJustCreated -> {
+                        setupAlbumSpinner {
+                            for ((index, album) in albums.withIndex()) {
+                                if (album._id == newAlbumId) {
+                                    spinner_album.setSelection(index)
+                                }
+                            }
+                        }
+                        isAlbumJustCreated = false
+                    }
+
+                    editMode -> {
+                        setupAlbumSpinner {
+                            for ((index, album) in albums.withIndex()) {
+                                if (album._id == editSong.album!!._id) {
+                                    spinner_album.setSelection(index)
+                                }
                             }
                         }
                     }
-                    isAlbumJustCreated = false
+
+                    else -> {
+                        setupAlbumSpinner(null)
+                    }
                 }
 
             }
@@ -339,7 +363,12 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 }
             }
         }
-        songService.addNewSong(newSongTitle, artistId, albumId, lyrics).enqueue(result)
+        if (editMode) {
+            songService.updateSong(editSong._id, newSongTitle, artistId, albumId, lyrics).enqueue(result)
+        } else {
+            songService.addNewSong(newSongTitle, artistId, albumId, lyrics).enqueue(result)
+        }
+
         finish()
     }
 
@@ -410,5 +439,33 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         } else {
             albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, null, null).enqueue(result)
         }
+    }
+
+    private fun getSongDetails(songId: String) {
+        val songService = SongAPI.service
+
+        val result = object : Callback<Song> {
+            override fun onFailure(call: Call<Song>, t: Throwable) {
+                Log.d("SongService", "Error: $t")
+            }
+
+            override fun onResponse(call: Call<Song>?, response: Response<Song>?) {
+                if (response != null) {
+                    editSong = response.body()!!
+                    textInputLayout_title.editText!!.setText(editSong.title)
+                    textInputLayout_lyrics.editText!!.setText(editSong.lyrics)
+                    getArtist {
+                        setupArtistSpinner {
+                            for ((index, artist) in artists.withIndex()) {
+                                if (artist._id == editSong.artist._id) {
+                                    spinner_artist.setSelection(index)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        songService.getSongById(songId).enqueue(result)
     }
 }

@@ -10,7 +10,7 @@ import retrofit2.http.*
 
 object SongAPI {
     //create URL
-    const val url = "https://tuanl-sssf.jelastic.metropolia.fi/song/"
+    private const val url = "https://tuanl-sssf.jelastic.metropolia.fi/song/"
 
     //Define services
     interface Service {
@@ -31,6 +31,16 @@ object SongAPI {
 
         @DELETE("{song_id}")
         fun deleteSongById(@Path(value = "song_id", encoded = true) id: String) : Call<ResponseBody>
+
+        @FormUrlEncoded
+        @PATCH("{song_id}")
+        fun updateSong(
+            @Path(value = "song_id", encoded = true) id: String,
+            @Field("title") title: String,
+            @Field("artist") artistId: String,
+            @Field("album") albumId: String,
+            @Field("lyrics") lyrics: String
+        ): Call<NewSong>
     }
 
     //Create and config Retrofit with builder
