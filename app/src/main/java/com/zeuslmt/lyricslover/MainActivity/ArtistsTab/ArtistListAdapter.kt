@@ -53,6 +53,8 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
             getArtworkFromAlbum(thisArtist.albums[0]._id) { artwork ->
                 holder.artistAvatar.setImageBitmap(artwork)
             }
+        } else {
+            holder.artistAvatar.setImageDrawable(appContext.getDrawable(R.drawable.avatar_placeholder))
         }
 
         if (thisArtist.songs == null) {

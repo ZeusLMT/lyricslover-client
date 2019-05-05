@@ -66,6 +66,7 @@ class AlbumGridAdapter (private val appContext: Context, val clickListener: (Alb
             }
         } else {
             holder.progressBar.visibility = View.GONE
+            holder.artwork.setImageDrawable(appContext.getDrawable(R.drawable.artwork_placeholder))
         }
 
         holder.itemView.setOnClickListener { clickListener(thisAlbum) }

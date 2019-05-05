@@ -114,7 +114,7 @@ class SongDetailsActivity : AppCompatActivity() {
                             .radius(5)
                             .sampling(5)
                             .color(Color.argb(90, 255, 255, 255))
-                            .from(BitmapFactory.decodeResource(resources, R.drawable.artwork_placeholder))
+                            .from(BitmapFactory.decodeResource(resources, R.drawable.song_bg))
                             .into(imageView_bg)
                     }
                 }
