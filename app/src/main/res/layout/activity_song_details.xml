@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/constraintLayout_header"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="24dp">
 
         <TextView
                 android:layout_width="0dp"
@@ -28,9 +28,9 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp" android:text="@string/hint_title"
                 android:gravity="center_horizontal" android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp"
+                app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/colorAccent" android:textStyle="bold"
-                android:fontFamily="@font/quicksand_medium"/>
+                android:fontFamily="@font/quicksand_medium" android:layout_marginTop="8dp"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -63,11 +63,12 @@
             android:id="@+id/ConstraintLayout_lyrics"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraintLayout_header"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/btn_edit">
+            android:layout_marginBottom="24dp" app:layout_constraintBottom_toTopOf="@+id/btn_edit"
+            app:layout_constraintDimensionRatio="1">
 
         <android.support.constraint.Guideline
                 android:id="@+id/guideline6"
@@ -116,7 +117,7 @@
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/large_text"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
                 app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -129,7 +130,7 @@
             android:text="@string/textView_updatedAt"
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/textView_updatedAt"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:textStyle="italic"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" android:textStyle="italic"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/btn_edit"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"

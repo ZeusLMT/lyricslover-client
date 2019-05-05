@@ -62,7 +62,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_song)
-        supportActionBar?.title = "New Song"
+        supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.ic_action_bar))
 
         checkSaveButtonState()
 
@@ -76,9 +76,11 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         //Set up artist and album spinner
         if (editMode) {
+            supportActionBar?.title = "Update Song"
             val songId = intent.getStringExtra("_id")
             getSongDetails(songId)
         } else {
+            supportActionBar?.title = "New Song"
             getArtist { setupArtistSpinner(null) }
         }
 

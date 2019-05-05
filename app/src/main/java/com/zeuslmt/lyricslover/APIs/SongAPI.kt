@@ -20,6 +20,9 @@ object SongAPI {
         @GET("{song_id}")
         fun getSongById(@Path(value = "song_id", encoded = true) id: String) : Call<Song>
 
+        @GET("search")
+        fun getSongsByAlbum(@Query("album") albumId: String) : Call<Array<Song>>
+
         @FormUrlEncoded
         @POST(".")
         fun addNewSong(

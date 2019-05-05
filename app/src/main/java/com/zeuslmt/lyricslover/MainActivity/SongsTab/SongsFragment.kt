@@ -66,7 +66,13 @@ class SongsFragment : Fragment() {
                 }
             }
         }
-        songService.getAllSongs().enqueue(result)
+        if (arguments == null) {
+            songService.getAllSongs().enqueue(result)
+        } else {
+            val albumId = arguments!!.getString("_id")
+            songService.getSongsByAlbum(albumId!!).enqueue(result)
+        }
+
     }
 
     private fun deleteSong(songId: String) {

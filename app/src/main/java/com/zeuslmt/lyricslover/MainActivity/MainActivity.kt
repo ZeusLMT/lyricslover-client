@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.ViewGroup
+import com.zeuslmt.lyricslover.ItemDetails.ItemDetailsActivity
 import com.zeuslmt.lyricslover.MainActivity.SongsTab.SongsFragment
 import com.zeuslmt.lyricslover.NewSongActivity.NewSongActivity
 import com.zeuslmt.lyricslover.R
@@ -90,9 +91,19 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
 
     override fun onAlbumClick(item: Album) {
         Log.d("AlbumListener", item.title)
+        val intent = Intent(this, ItemDetailsActivity::class.java).apply {}
+        intent.putExtra("itemType", "album")
+        intent.putExtra("_id", item._id)
+        intent.putExtra("title", item.title)
+        startActivity(intent)
     }
 
     override fun onArtistClick(item: Artist) {
         Log.d("ArtistListener", item.name)
+        val intent = Intent(this, ItemDetailsActivity::class.java).apply {}
+        intent.putExtra("itemType", "artist")
+        intent.putExtra("_id", item._id)
+        intent.putExtra("title", item.name)
+        startActivity(intent)
     }
 }

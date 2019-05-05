@@ -56,19 +56,24 @@ class AlbumsFragment : Fragment() {
 
         val result = object : Callback<Array<Album>> {
             override fun onFailure(call: Call<Array<Album>>, t: Throwable) {
-                Log.d("SongService", "Error$t")
+                Log.d("AlbumService", "Error$t")
             }
 
             override fun onResponse(call: Call<Array<Album>>?, response: Response<Array<Album>>?) {
                 if (response != null) {
                     albums = response.body()!!
-                    Log.d("abc", albums.size.toString())
                     adapter.setData(albums)
                     progressBar_album.visibility = View.GONE
                 }
             }
         }
-        albumService.getAllAlbums().enqueue(result)
+
+        if (arguments == null) {
+            albumService.getAllAlbums().enqueue(result)
+        } else {
+            val artistId = arguments!!.getString("_id")
+            albumService.getAlbumsByArtist(artistId!!).enqueue(result)
+        }
     }
 
 
