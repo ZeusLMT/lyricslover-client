@@ -71,6 +71,8 @@ class SongDetailsActivity : AppCompatActivity() {
                     textView_lyrics.text = song.lyrics
 
                     if (song.album != null) {
+                        textView_albumTitle.visibility = View.VISIBLE
+                        album_artist_divider.visibility = View.VISIBLE
                         textView_albumTitle.text = (song.album)!!.title
                         getArtworkFromAlbum(song.album!!._id)
                     } else {
