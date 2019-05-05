@@ -103,8 +103,8 @@ class SongDetailsActivity : AppCompatActivity() {
                             uiThread {
                                 Blurry.with(applicationContext)
                                     .radius(5)
-                                    .sampling(4)
-                                    .color(Color.argb(80, 255, 255, 255))
+                                    .sampling(5)
+                                    .color(Color.argb(90, 255, 255, 255))
                                     .from(artwork)
                                     .into(imageView_bg)
                             }
@@ -112,8 +112,8 @@ class SongDetailsActivity : AppCompatActivity() {
                     } else {
                         Blurry.with(applicationContext)
                             .radius(5)
-                            .sampling(4)
-                            .color(Color.argb(80, 255, 255, 255))
+                            .sampling(5)
+                            .color(Color.argb(90, 255, 255, 255))
                             .from(BitmapFactory.decodeResource(resources, R.drawable.artwork_placeholder))
                             .into(imageView_bg)
                     }
