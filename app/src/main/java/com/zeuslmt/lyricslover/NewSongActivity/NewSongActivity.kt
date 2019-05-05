@@ -103,7 +103,7 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             //Check for Write permission
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-                Log.d("abc", "not granted")
+                Log.d("Permission", "not granted")
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }
@@ -131,26 +131,23 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     //Overrides for Spinner Item Select Listener
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        Log.d("abc", "Nothing selected")
         if(parent!!.id == R.id.spinner_album)
         {
-            Log.d("abc", "Nothing selected - album")
+            Log.d("SpinnerListener", "Nothing selected - album")
         }
         else if(parent.id == R.id.spinner_artist)
         {
-            Log.d("abc", "Nothing selected - artist")
+            Log.d("SpinnerListener", "Nothing selected - artist")
         }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if(parent!!.id == R.id.spinner_album)
         {
-            Log.d("abc", "onItemSelected - album")
             setSelectedAlbumArtwork(albums[position].artwork)
         }
         else if(parent.id == R.id.spinner_artist)
         {
-            Log.d("abc", "onItemSelected - artist")
             val artistId = artists[position]._id
             getAlbumsByArtist(artistId) {
                 when {
@@ -194,14 +191,12 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 val artistId = bundle.getString("artist")
                 val year = bundle.getString("year")
                 val artwork = bundle.getString("artwork")
-                Log.d("abc", "title: $albumTitle, artistID: $artistId, year: $year, artwork: $artwork")
 
                 createNewAlbum(albumTitle!!, artistId!!, year, artwork)
             }
 
             NEW_ARTIST_DIALOG_TAG -> {
                 val artistName = bundle.getString("name")
-                Log.d("abc", "New artist name: $artistName")
                 createNewArtist(artistName!!)
             }
         }
@@ -211,16 +206,13 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     //Private methods
 
     private fun checkSaveButtonState() {
-        Log.d("abc", "check save button")
         val emptyTitle = textInputLayout_title.editText!!.text.isBlank()
         val emptyLyrics = textInputLayout_lyrics.editText!!.text.isBlank()
         val artistNotSelected = spinner_artist.selectedItem == null
         val albumNotSelected = spinner_album.selectedItem == null
 
-        Log.d("abc", "$emptyTitle - $emptyLyrics - $artistNotSelected - $albumNotSelected")
 
         button_save.isEnabled = !(emptyTitle || emptyLyrics || artistNotSelected || albumNotSelected)
-        Log.d("abc", button_save.isEnabled.toString())
 
         button_save.alpha = if (button_save.isEnabled) 1.toFloat() else 0.3.toFloat()
     }

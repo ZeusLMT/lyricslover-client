@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
         if (resourceId > 0) {
             result = resources.getDimensionPixelSize(resourceId)
         }
-        Log.d("abc", "Statusbar: $result")
         return result
     }
 
@@ -83,14 +82,12 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
 
     //Listeners from fragments
     override fun onSongClick(item: Song) {
-        Log.d("SongListener", item.title)
         val intent = Intent(this, SongDetailsActivity::class.java).apply {}
         intent.putExtra("_id", item._id)
         startActivity(intent)
     }
 
     override fun onAlbumClick(item: Album) {
-        Log.d("AlbumListener", item.title)
         val intent = Intent(this, ItemDetailsActivity::class.java).apply {}
         intent.putExtra("itemType", "album")
         intent.putExtra("_id", item._id)
@@ -99,7 +96,6 @@ class MainActivity : AppCompatActivity(), SongsFragment.SongsFragListener, Album
     }
 
     override fun onArtistClick(item: Artist) {
-        Log.d("ArtistListener", item.name)
         val intent = Intent(this, ItemDetailsActivity::class.java).apply {}
         intent.putExtra("itemType", "artist")
         intent.putExtra("_id", item._id)

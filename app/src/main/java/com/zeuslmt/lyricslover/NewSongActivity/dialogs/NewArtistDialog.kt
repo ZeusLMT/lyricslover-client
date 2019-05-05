@@ -49,7 +49,6 @@ class NewArtistDialog : DialogFragment() {
             val artistName = artistTIL.editText!!.text.toString()
             when {
                 artistName.isBlank() -> {
-                    Log.d("abc", "isBlank")
                     artistTIL.error = getString(R.string.error_empty_artistName)
                 }
 

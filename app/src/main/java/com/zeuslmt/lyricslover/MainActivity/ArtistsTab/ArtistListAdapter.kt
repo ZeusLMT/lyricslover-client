@@ -80,12 +80,12 @@ class ArtistListAdapter (private val appContext: Context, val clickListener: (Ar
 
         val result = object : Callback<HashMap<String, String>> {
             override fun onFailure(call: Call<HashMap<String, String>>, t: Throwable) {
-                Log.d("AlbumService", "Error$t")
+                Log.d("ArtistService", "Error$t")
             }
 
             override fun onResponse(call: Call<HashMap<String, String>>?, response: Response<HashMap<String, String>>?) {
                 if (response != null) {
-                    Log.d("AlbumService", "Artwork: ${response.body()}")
+                    Log.d("ArtistService", "Artwork: ${response.body()}")
                     val artworkPath = response.body()!!["artwork"]
 
                     if (artworkPath != null) {
