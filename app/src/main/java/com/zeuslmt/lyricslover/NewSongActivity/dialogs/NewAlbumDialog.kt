@@ -7,15 +7,19 @@ import android.support.design.widget.TextInputLayout
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
 import com.zeuslmt.lyricslover.APIs.ArtistAPI
-import com.zeuslmt.lyricslover.R
 import com.zeuslmt.lyricslover.models.Artist
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Intent
+import android.app.Activity.RESULT_OK
+import android.provider.MediaStore
+import android.net.Uri
+import android.view.View
+import android.widget.*
+import com.zeuslmt.lyricslover.R
+
 
 class NewAlbumDialog : DialogFragment() {
     companion object {
@@ -23,6 +27,8 @@ class NewAlbumDialog : DialogFragment() {
     }
     private lateinit var listener: NoticeDialogListener
     private var artists: Array<Artist> = emptyArray()
+    private var newArtworkPath: String? = ""
+    private var artistSelected = false
 
     interface NoticeDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment, bundle: Bundle)
@@ -53,8 +59,11 @@ class NewAlbumDialog : DialogFragment() {
         super.onStart()
         val d = (dialog as AlertDialog)
 
-        getArtist {
-            setupArtistSpinner(null)
+        if (!artistSelected) {
+            getArtist {
+                setupArtistSpinner(null)
+            }
+            artistSelected = true
         }
 
         d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
@@ -66,12 +75,25 @@ class NewAlbumDialog : DialogFragment() {
                 val bundle = Bundle()
                 bundle.putString("title", albumTitleTIL.editText!!.text.toString())
                 bundle.putString("artist", artists[artistSpinner.selectedItemPosition]._id)
+
                 if (yearTIL.editText!!.text != null) {
                     bundle.putString("year", yearTIL.editText!!.text.toString())
                 }
+
+                if (!newArtworkPath.isNullOrEmpty()) {
+                    bundle.putString("artwork", newArtworkPath)
+                }
+
                 listener.onDialogPositiveClick(this, bundle)
                 dismiss()
             }
+        }
+
+        dialog.findViewById<ImageView>(R.id.imageView_newArtwork).setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_SELECT)
         }
     }
 
@@ -88,9 +110,27 @@ class NewAlbumDialog : DialogFragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_SELECT) {
+                // Get the url from data
+                val selectedImageUri = data!!.data
+                if (null != selectedImageUri) {
+                    // Get the path from the Uri
+                    newArtworkPath = getPathFromURI(selectedImageUri)
+                    Log.d("SelectImage", "Image Path : $newArtworkPath")
+                    // Set the image in ImageView
+                    dialog.findViewById<ImageView>(R.id.imageView_newArtwork).setImageURI(selectedImageUri)
+                }
+            }
+        }
+    }
+
+
+
     private fun checkSaveButtonState(artistSpinner: Spinner, titleTIL: TextInputLayout): Boolean {
-        var isTitleNotEmpty = false
-        var isSpinnerSelected = false
+        var isTitleNotEmpty: Boolean
+        val isSpinnerSelected = artistSpinner.selectedItem != null
 
         if (titleTIL.editText!!.text.isBlank()) {
             titleTIL.error = getString(R.string.error_empty_albumName)
@@ -98,8 +138,6 @@ class NewAlbumDialog : DialogFragment() {
         } else {
             isTitleNotEmpty = true
         }
-
-        isSpinnerSelected = artistSpinner.selectedItem != null
 
         return (isSpinnerSelected && isTitleNotEmpty)
     }
@@ -146,5 +184,33 @@ class NewAlbumDialog : DialogFragment() {
 
     private fun handleEmptyArtist() {
         Toast.makeText(activity, "Found no artist, consider adding one first!", Toast.LENGTH_LONG).show()
+    }
+
+    /* Get the real path from the URI */
+    private fun getPathFromURI(contentUri: Uri): String? {
+        var path = ""
+        var imageId = ""
+
+        var cursor = context!!.contentResolver.query(contentUri, null, null, null, null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            imageId = cursor.getString(0)
+            imageId = imageId.substring(imageId.lastIndexOf(":") + 1)
+            cursor.close()
+        }
+
+        cursor = context!!.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            null,
+            MediaStore.Images.Media._ID + " = ? ",
+            arrayOf(imageId),
+            null
+        )
+        if (cursor != null) {
+            cursor.moveToFirst()
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+            cursor.close()
+        }
+        return path
     }
 }

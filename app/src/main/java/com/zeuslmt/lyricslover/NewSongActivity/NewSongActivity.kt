@@ -27,6 +27,7 @@ import com.zeuslmt.lyricslover.models.*
 import kotlinx.android.synthetic.main.activity_new_song.*
 import kotlinx.android.synthetic.main.dialog_new_artist.*
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.AlertDialogBuilder
 import org.jetbrains.anko.doAsync
@@ -34,6 +35,7 @@ import org.jetbrains.anko.uiThread
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -433,12 +435,22 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         val reqBodyTitle = RequestBody.create(MediaType.parse("text/plain"), albumTitle)
         val reqBodyArtist = RequestBody.create(MediaType.parse("text/plain"), artistId)
-        if (year != null) {
-            val reqBodyYear = RequestBody.create(MediaType.parse("text/plain"), year)
-            albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, reqBodyYear, null).enqueue(result)
+
+        val reqBodyYear: RequestBody?
+        if (year == null) {
+            reqBodyYear = null
         } else {
-            albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, null, null).enqueue(result)
+            reqBodyYear = RequestBody.create(MediaType.parse("text/plain"), year)
         }
+
+        var artworkPart : MultipartBody.Part? = null
+        if (artwork != null) {
+            val artworkFile = File(artwork)
+            val reqBodyArtwork = RequestBody.create(MediaType.parse("image/*"), artworkFile)
+            artworkPart = MultipartBody.Part.createFormData("artwork", artworkFile.name, reqBodyArtwork)
+        }
+
+        albumService.addNewAlbum(reqBodyTitle, reqBodyArtist, reqBodyYear, artworkPart).enqueue(result)
     }
 
     private fun getSongDetails(songId: String) {

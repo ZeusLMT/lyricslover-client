@@ -65,17 +65,23 @@ class SongDetailsActivity : AppCompatActivity() {
                     song = response.body()!!
                     Log.d("SongService", song.toString())
 
-                    getArtworkFromAlbum(song.album!!._id)
-
                     textView_songTitle.text = song.title
                     textView_artistName.text = (song.artist).name
                     textView_updatedAt.text = getString(R.string.textView_updatedAt, song.updatedAt)
                     textView_lyrics.text = song.lyrics
+
                     if (song.album != null) {
                         textView_albumTitle.text = (song.album)!!.title
+                        getArtworkFromAlbum(song.album!!._id)
                     } else {
                         textView_albumTitle.visibility = View.GONE
                         album_artist_divider.visibility = View.GONE
+                        Blurry.with(applicationContext)
+                            .radius(5)
+                            .sampling(5)
+                            .color(Color.argb(90, 255, 255, 255))
+                            .from(BitmapFactory.decodeResource(resources, R.drawable.song_bg))
+                            .into(imageView_bg)
                     }
                 }
             }
@@ -114,7 +120,7 @@ class SongDetailsActivity : AppCompatActivity() {
                             .radius(5)
                             .sampling(5)
                             .color(Color.argb(90, 255, 255, 255))
-                            .from(BitmapFactory.decodeResource(resources, R.drawable.song_bg))
+                            .from(BitmapFactory.decodeResource(resources, R.drawable.artwork_placeholder))
                             .into(imageView_bg)
                     }
                 }
