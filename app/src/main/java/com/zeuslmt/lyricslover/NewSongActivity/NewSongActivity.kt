@@ -260,10 +260,10 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         if(albums.isEmpty()) {
             handleEmptyAlbum()
-        }
-
-        if (setSelectionManually != null) {
-            setSelectionManually()
+        } else {
+            if (setSelectionManually != null) {
+                setSelectionManually()
+            }
         }
     }
 
@@ -295,18 +295,23 @@ class NewSongActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     private fun setupArtistSpinner(setSelectionManually: (() -> Unit)?) {
         val artistNames = ArrayList<String>()
 
-        if (artists.isNotEmpty()) {
-            for (artist in artists) {
-                artistNames.add(artist.name)
-            }
-        } else {
-            handleEmptyArtist()
+        for (artist in artists) {
+            artistNames.add(artist.name)
         }
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, artistNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner_artist.adapter = adapter
+
+
+        if (artists.isNotEmpty()) {
+            if (setSelectionManually != null) {
+                setSelectionManually()
+            }
+        } else {
+            handleEmptyArtist()
+        }
 
         if (setSelectionManually != null) {
             setSelectionManually()
